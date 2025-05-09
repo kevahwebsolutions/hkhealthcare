@@ -261,6 +261,41 @@
             <p class="section-subtitle">Top-quality medical devices and supplies trusted by healthcare professionals</p>
         </div>
         
+        <style>
+            /* Add this CSS to ensure images fit properly */
+            .product-wrapper {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            .product-img {
+                height: 200px; /* Set a fixed height for image containers */
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f5f5f5; /* Optional: adds a light background */
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            .product-img img {
+                max-width: 100%;
+                max-height: 100%;
+                width: 100%;
+                height: 100%;
+                object-fit: contain; /* Ensures image fits while maintaining aspect ratio */
+            }
+            .product-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                padding: 15px 0;
+            }
+            .product-add-to-cart {
+                margin-top: auto;
+            }
+        </style>
+        
         <div class="featured-product-active hot-flower owl-carousel product-nav">
             <!-- Product 1: Patient Monitor -->
             <div class="product-wrapper">
@@ -268,7 +303,6 @@
                     <a>
                         <img alt="Multi-Parameter Patient Monitor" src="assets/img/product/patient-monitor.jpg">
                     </a>
-                    
                 </div>
                 <div class="product-content text-left">
                     <div class="product-title">
@@ -285,7 +319,6 @@
                                 data-name="Multi-Parameter Patient Monitor"
                                 data-price="85000.00"
                                 data-image="assets/img/product/patient-monitor.jpg"
-                                
                                 style="background-color: #121cde; color: white; border: none; padding: 8px 15px; border-radius: 4px; width: 100%; margin-top: 10px;">
                             Add to Cart
                         </button>
@@ -299,7 +332,6 @@
                     <a>
                         <img alt="Electric Hospital Bed" src="assets/img/product/hospital-bed.jpg">
                     </a>
-                    
                 </div>
                 <div class="product-content text-left">
                     <div class="product-title">
@@ -316,7 +348,6 @@
                                 data-name="Electric Hospital Bed"
                                 data-price="120000.00"
                                 data-image="assets/img/product/hospital-bed.jpg"
-                                
                                 style="background-color: #121cde; color: white; border: none; padding: 8px 15px; border-radius: 4px; width: 100%; margin-top: 10px;">
                             Add to Cart
                         </button>
@@ -330,8 +361,6 @@
                     <a>
                         <img alt="Medical Oxygen Concentrator" src="assets/img/product/oxygen-concentrator.jpg">
                     </a>
-                    
-                    
                 </div>
                 <div class="product-content text-left">
                     <div class="product-title">
@@ -348,7 +377,6 @@
                                 data-name="Medical Oxygen Concentrator"
                                 data-price="95000.00"
                                 data-image="assets/img/product/oxygen-concentrator.jpg"
-                                
                                 style="background-color: #121cde; color: white; border: none; padding: 8px 15px; border-radius: 4px; width: 100%; margin-top: 10px;">
                             Add to Cart
                         </button>
@@ -362,7 +390,6 @@
                     <a>
                         <img alt="Basic Surgical Instrument Set" src="assets/img/product/surgical-set.jpg">
                     </a>
-                    
                 </div>
                 <div class="product-content text-left">
                     <div class="product-title">
@@ -379,7 +406,6 @@
                                 data-name="Basic Surgical Instrument Set"
                                 data-price="45000.00"
                                 data-image="assets/img/product/surgical-set.jpg"
-                                
                                 style="background-color: #121cde; color: white; border: none; padding: 8px 15px; border-radius: 4px; width: 100%; margin-top: 10px;">
                             Add to Cart
                         </button>
@@ -393,7 +419,6 @@
                     <a>
                         <img alt="Professional Medical Scrubs" src="assets/img/product/medical-scrubs.jpg">
                     </a>
-                    
                 </div>
                 <div class="product-content text-left">
                     <div class="product-title">
@@ -410,7 +435,6 @@
                                 data-name="Professional Medical Scrubs"
                                 data-price="3500.00"
                                 data-image="assets/img/product/medical-scrubs.jpg"
-                                
                                 style="background-color: #121cde; color: white; border: none; padding: 8px 15px; border-radius: 4px; width: 100%; margin-top: 10px;">
                             Add to Cart
                         </button>
@@ -775,13 +799,13 @@ document.getElementById('newsletter-form').addEventListener('submit', function(e
                             <p>Nairobi, Kenya - HK Healthcare</p>
                             <div class="footer-contact mt-20">
                                 <ul>
-                                    <li>+254 700 000 000</li>
-                                    <li>+254 711 111 111</li>
+                                    <li><a href="tel:254704620883">254 704 620 883</a></li>
+                                    <li><a href="tel:+254748840060"></a>+254 748 840 060</a></li>
                                 </ul>
                             </div>
                             <div class="footer-contact mt-20">
                                 <ul>
-                                    <li>info@hkhealthcare.co.ke</li>
+                                    <li><a href="mailto:info@hkhealthcare.co.ke">info@hkhealthcare.co.ke</a></li>
                                     
                                 </ul>
                             </div>
@@ -820,88 +844,6 @@ document.getElementById('newsletter-form').addEventListener('submit', function(e
     </div>
 </footer>
 <!-- Footer Area End -->
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-5 col-sm-5 col-xs-12">
-                                <!-- Thumbnail Large Image start -->
-                                <div class="tab-content">
-                                    <div id="pro-1" class="tab-pane fade show active">
-                                        <img src="assets/img/product-details/product-detalis-l1.jpg" alt="">
-                                    </div>
-                                    <div id="pro-2" class="tab-pane fade">
-                                        <img src="assets/img/product-details/product-detalis-l2.jpg" alt="">
-                                    </div>
-                                    <div id="pro-3" class="tab-pane fade">
-                                        <img src="assets/img/product-details/product-detalis-l3.jpg" alt="">
-                                    </div>
-                                    <div id="pro-4" class="tab-pane fade">
-                                        <img src="assets/img/product-details/product-detalis-l4.jpg" alt="">
-                                    </div>
-                                </div>
-                                <!-- Thumbnail Large Image End -->
-                                <!-- Thumbnail Image End -->
-                                <div class="product-thumbnail">
-                                    <div class="thumb-menu owl-carousel nav nav-style" role="tablist">
-                                        <a class="active" data-toggle="tab" href="#pro-1"><img src="assets/img/product-details/product-detalis-s1.jpg" alt=""></a>
-                                        <a data-toggle="tab" href="#pro-2"><img src="assets/img/product-details/product-detalis-s2.jpg" alt=""></a>
-                                        <a data-toggle="tab" href="#pro-3"><img src="assets/img/product-details/product-detalis-s3.jpg" alt=""></a>
-                                        <a data-toggle="tab" href="#pro-4"><img src="assets/img/product-details/product-detalis-s4.jpg" alt=""></a>
-                                    </div>
-                                </div>
-                                <!-- Thumbnail image end -->
-                            </div>
-                            <div class="col-md-7 col-sm-7 col-xs-12">
-                                <div class="modal-pro-content">
-                                    <h3>Dutchman's Breeches </h3>
-                                    <div class="product-price-wrapper">
-                                        <span class="product-price-old">£162.00 </span>
-                                        <span>£120.00</span>
-                                    </div>
-                                    <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet.</p>	
-                                    <div class="quick-view-select">
-                                        <div class="select-option-part">
-                                            <label>Size*</label>
-                                            <select class="select">
-                                                <option value="">S</option>
-                                                <option value="">M</option>
-                                                <option value="">L</option>
-                                            </select>
-                                        </div>
-                                        <div class="quickview-color-wrap">
-                                            <label>Color*</label>
-                                            <div class="quickview-color">
-                                                <ul>
-                                                    <li class="blue">b</li>
-                                                    <li class="red">r</li>
-                                                    <li class="pink">p</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-quantity">
-                                        <div class="cart-plus-minus">
-                                            <input class="cart-plus-minus-box" type="text" name="qtybutton" value="02">
-                                        </div>
-                                        <button>Add to cart</button>
-                                    </div>
-                                    <span><i class="fa fa-check"></i> In stock</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal end -->
-        
 
 		<!-- all js here -->
         <script src="assets/js/vendor/jquery-1.12.0.min.js"></script>
