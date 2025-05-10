@@ -79,6 +79,10 @@
 
 <style>
     /* Cart icon styling */
+    .header-cart {
+        position: relative;
+    }
+    
     .cart-icon {
         position: relative;
         font-size: 22px;
@@ -86,8 +90,8 @@
     
     .cart-count {
         position: absolute;
-        top: 40px;
-        right: -25px;
+        top: 20px;
+        right: -10px;
         background: #121cde;
         color: white;
         border-radius: 50%;
@@ -101,33 +105,51 @@
     
     /* Mini cart styling */
     .shopping-cart-content {
+        position: absolute;
+        right: 0;
+        top: 100%;
         width: 300px;
+        max-width: 90vw; /* Ensure it doesn't exceed viewport width */
         padding: 15px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        z-index: 999;
+        display: none; /* Hidden by default */
+    }
+    
+    .header-cart:hover .shopping-cart-content {
+        display: block;
     }
     
     #mini-cart-list {
         max-height: 300px;
         overflow-y: auto;
+        margin: 0;
+        padding: 0;
+        list-style: none;
     }
     
     #mini-cart-list li {
         padding: 10px 0;
         border-bottom: 1px solid #eee;
+        word-break: break-word; /* Prevent text overflow */
     }
     
     .shopping-cart-img img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 50px;
+        height: 50px;
         object-fit: cover;
     }
     
     .shopping-cart-title {
         margin-left: 10px;
+        overflow: hidden; /* Contain text properly */
     }
     
     .shopping-cart-title h4 {
         font-size: 14px;
         margin-bottom: 5px;
+        white-space: normal; /* Allow text to wrap */
     }
     
     .shopping-cart-title h6, 
@@ -135,17 +157,85 @@
         font-size: 12px;
     }
     
+    .shopping-cart-total {
+        padding: 10px 0;
+    }
+    
     .shopping-cart-total h4 {
         font-size: 14px;
         margin: 10px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .shopping-cart-btn {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
     }
     
     .shopping-cart-btn a {
-        display: inline-block;
-        padding: 5px 10px;
+        flex: 1;
+        text-align: center;
+        padding: 8px 10px;
         font-size: 13px;
+        background: #121cde;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+    
+    .shopping-cart-btn a:hover {
+        opacity: 0.9;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 480px) {
+        .shopping-cart-content {
+            width: 280px;
+            right: -50px; /* Adjust position on small screens */
+        }
+        
+        .cart-count {
+            top: -5px;
+            right: -5px;
+        }
+    }
+    
+    @media (max-width: 360px) {
+        .shopping-cart-content {
+            width: 260px;
+            right: -30px;
+            padding: 10px;
+        }
+        
+        .shopping-cart-btn {
+            flex-direction: column;
+            gap: 8px;
+        }
     }
 </style>
+
+<script>
+// For mobile touch support
+document.addEventListener('DOMContentLoaded', function() {
+    const cartToggle = document.querySelector('.cart-toggle');
+    const cartContent = document.querySelector('.shopping-cart-content');
+    
+    // Toggle cart on click (for mobile)
+    cartToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        cartContent.style.display = cartContent.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    // Close cart when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.header-cart')) {
+            cartContent.style.display = 'none';
+        }
+    });
+});
+</script>
                         
                         <!-- Mobile Menu Toggle -->
                         <div class="mobile-menu-toggle d-lg-none">
@@ -341,107 +431,100 @@
     // Initial load
     loadCartPage();
 });</script>
-        <!-- Footer style Start -->
-        <footer class="footer-area pt-75 gray-bg-3">
-            <div class="footer-top gray-bg-3 pb-35">
-                <div class="container">
-                    <div class="row">
-						<div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="footer-widget mb-40">
-                                <div class="footer-title mb-25">
-                                    <h4>My Account</h4>
-                                </div>
-                                <div class="footer-content">
-                                    <ul>
-                                        <li><a href="my-account.html">My Account</a></li>
-                                        <li><a href="about-us.html">Order History</a></li>
-                                        <li><a href="wishlist.html">WishList</a></li>
-                                        <li><a href="#">Newsletter</a></li>
-                                        <li><a href="about-us.html">Order History</a></li>
-                                        <li><a href="#">International Orders</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+        <!-- Footer Area Start -->
+<footer class="footer-area pt-75 gray-bg-3">
+    <div class="footer-top gray-bg-3 pb-35">
+        <div class="container">
+            <div class="row">
+                <!-- Information Section -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer-widget mb-40">
+                        <div class="footer-title mb-25">
+                            <h4>Information</h4>
                         </div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="footer-widget mb-40">
-                                <div class="footer-title mb-25">
-                                    <h4>Information</h4>
-                                </div>
-                                <div class="footer-content">
-                                    <ul>
-                                        <li><a href="about-us.html">About Us</a></li>
-                                        <li><a href="#">Delivery Information</a></li>
-                                        <li><a href="#">Privacy Policy</a></li>
-                                        <li><a href="#">Terms & Conditions</a></li>
-                                        <li><a href="#">Customer Service</a></li>
-                                        <li><a href="#">Return Policy</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="footer-content">
+                            <ul>
+                                <li><a href="about-us.html">About Us</a></li>
+                                <li><a >Privacy Policy</a></li>
+                                <li><a >Terms & Conditions</a></li>
+                                <li><a >Customer Service</a></li>
+                                <li><a >Return Policy</a></li>
+                            </ul>
                         </div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="footer-widget mb-40">
-                                <div class="footer-title mb-25">
-                                    <h4>Quick Links</h4>
-                                </div>
-                                <div class="footer-content">
-                                    <ul>
-                                        <li><a href="#">Support Center</a></li>
-                                        <li><a href="#">Term & Conditions</a></li>
-                                        <li><a href="#">Shipping</a></li>
-                                        <li><a href="#">Privacy Policy</a></li>
-                                        <li><a href="#">Help</a></li>
-                                        <li><a href="#">FAQS</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links Section -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer-widget mb-40">
+                        <div class="footer-title mb-25">
+                            <h4>Quick Links</h4>
                         </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="footer-widget footer-widget-red footer-black-color mb-40">
-                                <div class="footer-title mb-25">
-                                    <h4>Contact Us</h4>
-                                </div>
-                                <div class="footer-about">
-                                    <p>Your current address goes to here,120 haka, angladesh</p>
-                                    <div class="footer-contact mt-20">
-                                        <ul>
-                                            <li>(+008) 254 254 254 25487</li>
-                                            <li>(+009) 358 587 657 6985</li>
-                                        </ul>
-                                    </div>
-									<div class="footer-contact mt-20">
-                                        <ul>
-                                            <li>yourmail@example.com</li>
-                                            <li>example@admin.com</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                        <div class="footer-content">
+                            <ul>
+                                <li><a >Terms & Conditions</a></li>
+                                <li><a >Privacy Policy</a></li>
+                                <li><a >FAQs</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Us Section -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer-widget footer-widget-red footer-black-color mb-40">
+                        <div class="footer-title mb-25">
+                            <h4>Contact Us</h4>
+                        </div>
+                        <div class="footer-about">
+                            <p>Nairobi, Kenya - HK Healthcare</p>
+                            <div class="footer-contact mt-20">
+                                <ul>
+                                    <li><a href="tel:254704620883">254 704 620 883</a></li>
+                                    <li><a href="tel:+254748840060">+254 748 840 060</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-contact mt-20">
+                                <ul>
+                                    <li><a href="mailto:info@hkhealthcare.co.ke">info@hkhealthcare.co.ke</a></li>
+                                    
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="footer-bottom pb-25 pt-25 gray-bg-2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                           <div class="copyright">
-                                <p><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></p>
-                            </div>
+
+                <!-- Payment or Additional Section (Optional) -->
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer-widget mb-40">
+                        <div class="footer-title mb-25">
+                            <h4>We Accept</h4>
                         </div>
-                        <div class="col-md-6">
-                            <div class="payment-img f-right">
-                                <a href="#">
-                                    <img alt="" src="assets/img/icon-img/payment.png">
-                                </a>
-                            </div>
+                        <div class="payment-img">
+                            <a >
+                                <img alt="Payment Methods" src="assets/img/icon-img/payment.png">
+                            </a>
                         </div>
                     </div>
                 </div>
+                <!-- End of Payment Section -->
             </div>
-        </footer>
-		<!-- Footer style End -->
+        </div>
+    </div>
+
+    <div class="footer-bottom pb-25 pt-25 gray-bg-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="copyright">
+                        <p>© 2025 HK Healthcare. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Area End -->
         
 		<!-- all js here -->
         <script src="assets/js/vendor/jquery-1.12.0.min.js"></script>
