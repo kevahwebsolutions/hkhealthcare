@@ -435,3 +435,218 @@
     });
 
 })(jQuery);
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to format numbers with commas
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Define available coupons
+    const availableCoupons = [
+        {
+            code: "HEALTH10",
+            discount: 10, // percentage
+            type: "percentage",
+            minPurchase: 1000, // minimum cart amount to apply
+            description: `10% off on orders over Ksh. ${formatNumber(1000)}`
+        },
+        {
+            code: "SAVE500",
+            discount: 500, // fixed amount
+            type: "fixed",
+            minPurchase: 2000,
+            description: `Ksh. ${formatNumber(500)} off on orders over Ksh. ${formatNumber(2000)}`
+        },
+        {
+            code: "NEWCUSTOMER",
+            discount: 15,
+            type: "percentage",
+            minPurchase: 0,
+            description: "15% off for new customers"
+        },
+        {
+            code: "FREESHIP",
+            discount: 0,
+            type: "freeship",
+            minPurchase: 1500,
+            description: `Free shipping on orders over Ksh. ${formatNumber(1500)}`
+        }
+    ];
+
+    // Load applied coupon from localStorage
+    let appliedCoupon = JSON.parse(localStorage.getItem('appliedCoupon')) || null;
+    let shippingCost = 0;
+
+    // Coupon form submission
+    document.getElementById('coupon-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const couponCode = document.getElementById('coupon-code').value.trim().toUpperCase();
+        const messageEl = document.getElementById('coupon-message');
+        
+        // Check if coupon exists
+        const coupon = availableCoupons.find(c => c.code === couponCode);
+        
+        if (!coupon) {
+            messageEl.textContent = "Invalid coupon code";
+            messageEl.style.color = "red";
+            return;
+        }
+        
+        // Get cart subtotal
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        // Check minimum purchase
+        if (subtotal < coupon.minPurchase) {
+            messageEl.textContent = `This coupon requires a minimum purchase of Ksh. ${formatNumber(coupon.minPurchase)}`;
+            messageEl.style.color = "red";
+            return;
+        }
+        
+        // Apply coupon
+        appliedCoupon = coupon;
+        localStorage.setItem('appliedCoupon', JSON.stringify(appliedCoupon));
+        
+        messageEl.textContent = `Coupon applied: ${coupon.description}`;
+        messageEl.style.color = "green";
+        
+        // Reload cart to update totals
+        loadCartPage();
+    });
+
+    // Function to calculate discount
+    function calculateDiscount(subtotal) {
+        if (!appliedCoupon) return 0;
+        
+        if (appliedCoupon.type === "percentage") {
+            return subtotal * (appliedCoupon.discount / 100);
+        } else if (appliedCoupon.type === "fixed") {
+            return appliedCoupon.discount;
+        }
+        return 0;
+    }
+
+    // Function to calculate shipping
+    function calculateShipping(subtotal) {
+        if (appliedCoupon && appliedCoupon.type === "freeship" && subtotal >= appliedCoupon.minPurchase) {
+            return 0;
+        }
+        
+        // Your regular shipping calculation logic here
+        // For example: Free shipping over 5000, otherwise 200
+        return subtotal >= 5000 ? 0 : 200;
+    }
+
+    // Modified loadCartPage function
+    function loadCartPage() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartTable = document.getElementById('cart-table').querySelector('tbody');
+        let subtotal = 0;
+
+        if (cart.length === 0) {
+            cartTable.innerHTML = '<tr><td colspan="6" class="text-center">Your cart is empty</td></tr>';
+            document.getElementById('cart-subtotal').textContent = 'Ksh. 0.00';
+            document.getElementById('cart-grand-total').textContent = 'Ksh. 0.00';
+            
+            // Clear coupon if cart is empty
+            if (appliedCoupon) {
+                appliedCoupon = null;
+                localStorage.removeItem('appliedCoupon');
+                document.getElementById('coupon-message').textContent = "Coupon removed (cart is empty)";
+            }
+            return;
+        }
+
+        let html = '';
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            subtotal += itemTotal;
+            
+            html += `
+                <tr>
+                    <td class="product-thumbnail">
+                        <a href="${item.url}"><img src="${item.image}" alt="${item.name}" style="max-width: 80px;"></a>
+                    </td>
+                    <td class="product-name"><a href="${item.url}">${item.name}</a></td>
+                    <td class="product-price-cart"><span class="amount">Ksh. ${formatNumber(item.price.toFixed(2))}</span></td>
+                    <td class="product-quantity">
+                        <div class="pro-dec-cart">
+                            <input class="cart-plus-minus-box" type="number" value="${item.quantity}" min="1" data-id="${item.id}">
+                        </div>
+                    </td>
+                    <td class="product-subtotal">Ksh. ${formatNumber(itemTotal.toFixed(2))}</td>
+                    <td class="product-remove">
+                        <a href="#" class="remove-item" data-id="${item.id}"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+            `;
+        });
+
+        cartTable.innerHTML = html;
+        
+        // Calculate discount and shipping
+        const discount = calculateDiscount(subtotal);
+        shippingCost = calculateShipping(subtotal);
+        const grandTotal = subtotal - discount + shippingCost;
+        
+        // Update displayed totals with formatted numbers
+        document.getElementById('cart-subtotal').textContent = `Ksh. ${formatNumber(subtotal.toFixed(2))}`;
+        document.getElementById('cart-grand-total').textContent = `Ksh. ${formatNumber(grandTotal.toFixed(2))}`;
+        
+        // Show discount if applied
+        const shippingElement = document.querySelector('.total-shipping h5 span');
+        if (shippingElement) {
+            shippingElement.textContent = `Ksh. ${formatNumber(shippingCost.toFixed(2))}`;
+            
+            // Add discount row if coupon is applied
+            const discountRow = document.querySelector('.discount-row');
+            if (discountRow) {
+                discountRow.remove();
+            }
+            
+            if (appliedCoupon && discount > 0) {
+                const shippingParent = document.querySelector('.total-shipping');
+                const discountHtml = `
+                    <div class="discount-row">
+                        <h5>Discount <span style="color: green;">- Ksh. ${formatNumber(discount.toFixed(2))}</span></h5>
+                    </div>
+                `;
+                shippingParent.insertAdjacentHTML('afterend', discountHtml);
+            }
+        }
+    }
+
+    // Add remove coupon functionality (optional)
+    function addRemoveCouponButton() {
+        if (appliedCoupon) {
+            const messageEl = document.getElementById('coupon-message');
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'Remove Coupon';
+            removeBtn.style.marginLeft = '10px';
+            removeBtn.style.padding = '2px 5px';
+            removeBtn.style.fontSize = '12px';
+            removeBtn.style.background = '#ff0000';
+            removeBtn.style.color = '#fff';
+            removeBtn.style.border = 'none';
+            removeBtn.style.borderRadius = '3px';
+            removeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                appliedCoupon = null;
+                localStorage.removeItem('appliedCoupon');
+                messageEl.textContent = 'Coupon removed';
+                messageEl.style.color = 'green';
+                loadCartPage();
+                this.remove();
+            });
+            messageEl.appendChild(removeBtn);
+        }
+    }
+
+    // Initialize
+    loadCartPage();
+    addRemoveCouponButton();
+
+    // Rest of your existing event listeners...
+});
