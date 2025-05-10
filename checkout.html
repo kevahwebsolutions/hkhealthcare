@@ -396,81 +396,86 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Load order summary
-    function loadOrderSummary() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const orderItems = document.getElementById('order-review-items');
-        let subtotal = 0;
-
-        if (cart.length === 0) {
-            orderItems.innerHTML = '<tr><td colspan="2">Your cart is empty</td></tr>';
-            document.getElementById('order-subtotal').textContent = 'Ksh. 0.00';
-            document.getElementById('order-total').textContent = 'Ksh. 0.00';
-            return;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to format numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
-
-        let html = '';
-        cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
-            subtotal += itemTotal;
+    
+        // Load order summary
+        function loadOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const orderItems = document.getElementById('order-review-items');
+            let subtotal = 0;
+    
+            if (cart.length === 0) {
+                orderItems.innerHTML = '<tr><td colspan="2">Your cart is empty</td></tr>';
+                document.getElementById('order-subtotal').textContent = 'Ksh. 0.00';
+                document.getElementById('order-total').textContent = 'Ksh. 0.00';
+                return;
+            }
+    
+            let html = '';
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                html += `
+                    <tr>
+                        <td>${item.name} × ${formatNumber(item.quantity)}</td>
+                        <td>Ksh. ${formatNumber(itemTotal.toFixed(2))}</td>
+                    </tr>
+                `;
+            });
+    
+            orderItems.innerHTML = html;
+            document.getElementById('order-subtotal').textContent = `Ksh. ${formatNumber(subtotal.toFixed(2))}`;
+            document.getElementById('order-total').textContent = `Ksh. ${formatNumber(subtotal.toFixed(2))}`;
+        }
+    
+        // WhatsApp order function
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            html += `
-                <tr>
-                    <td>${item.name} × ${item.quantity}</td>
-                    <td>Ksh. ${itemTotal.toFixed(2)}</td>
-                </tr>
-            `;
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            const formData = new FormData(this);
+            const formValues = Object.fromEntries(formData.entries());
+            
+            // Build order message
+            let message = `*NEW ORDER REQUEST*%0A%0A`;
+            message += `*Customer Information*%0A`;
+            message += `Name: ${formValues.first_name} ${formValues.last_name}%0A`;
+            message += `Phone: ${formValues.phone}%0A`;
+            if (formValues.email) message += `Email: ${formValues.email}%0A`;
+            message += `Address: ${formValues.address}%0A`;
+            if (formValues.notes) message += `Notes: ${formValues.notes}%0A`;
+            message += `Payment Method: ${formValues.payment_method}%0A%0A`;
+            
+            message += `*Order Details*%0A`;
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `- ${item.name} × ${formatNumber(item.quantity)}: Ksh. ${formatNumber(itemTotal.toFixed(2))}%0A`;
+            });
+            
+            message += `%0A*Total: Ksh. ${formatNumber(total.toFixed(2))}*%0A%0A`;
+            message += `Please confirm this order and provide payment instructions.`;
+            
+            // Open WhatsApp with the message
+            const whatsappUrl = `https://wa.me/+254116725879?text=${message}`;
+            window.open(whatsappUrl, '_blank');
         });
-
-        orderItems.innerHTML = html;
-        document.getElementById('order-subtotal').textContent = `Ksh. ${subtotal.toFixed(2)}`;
-        document.getElementById('order-total').textContent = `Ksh. ${subtotal.toFixed(2)}`;
-    }
-
-    // WhatsApp order function
-    document.getElementById('checkout-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        if (cart.length === 0) {
-            alert('Your cart is empty!');
-            return;
-        }
-        
-        const formData = new FormData(this);
-        const formValues = Object.fromEntries(formData.entries());
-        
-        // Build order message
-        let message = `*NEW ORDER REQUEST*%0A%0A`;
-        message += `*Customer Information*%0A`;
-        message += `Name: ${formValues.first_name} ${formValues.last_name}%0A`;
-        message += `Phone: ${formValues.phone}%0A`;
-        if (formValues.email) message += `Email: ${formValues.email}%0A`;
-        message += `Address: ${formValues.address}%0A`;
-        if (formValues.notes) message += `Notes: ${formValues.notes}%0A`;
-        message += `Payment Method: ${formValues.payment_method}%0A%0A`;
-        
-        message += `*Order Details*%0A`;
-        let total = 0;
-        cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
-            total += itemTotal;
-            message += `- ${item.name} × ${item.quantity}: Ksh. ${itemTotal.toFixed(2)}%0A`;
-        });
-        
-        message += `%0A*Total: Ksh. ${total.toFixed(2)}*%0A%0A`;
-        message += `Please confirm this order and provide payment instructions.`;
-        
-        // Open WhatsApp with the message
-        const whatsappUrl = `https://wa.me/+254116725879?text=${message}`;
-        window.open(whatsappUrl, '_blank');
+    
+        // Initial load
+        loadOrderSummary();
     });
-
-    // Initial load
-    loadOrderSummary();
-});
-</script>
+    </script>
 
 <style>
 .whatsapp-order-btn {
