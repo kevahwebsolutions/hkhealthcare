@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Function to format numbers with commas
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     // Initialize cart if it doesn't exist
     if (!localStorage.getItem('cart')) {
         localStorage.setItem('cart', JSON.stringify([]));
@@ -17,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (existingNotif) {
             const quantitySpan = existingNotif.querySelector('.notification-quantity');
             const newQuantity = parseInt(quantitySpan.textContent) + quantity;
-            quantitySpan.textContent = newQuantity;
+            quantitySpan.textContent = formatNumber(newQuantity);
 
             clearTimeout(existingNotif.dataset.timeout);
             existingNotif.dataset.timeout = setTimeout(() => {
@@ -32,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         notification.className = 'cart-notification';
         notification.dataset.product = productName;
         notification.innerHTML = `
-            <span>${productName} <span class="notification-quantity">${quantity}</span> added to cart</span>
+            <span>${productName} <span class="notification-quantity">${formatNumber(quantity)}</span> added to cart</span>
             <button class="close-notification">&times;</button>
         `;
 
@@ -55,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const count = cart.reduce((total, item) => total + item.quantity, 0);
         document.querySelectorAll('.cart-count').forEach(el => {
-            el.textContent = count;
+            el.textContent = formatNumber(count);
         });
     }
 
@@ -88,8 +93,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                     <div class="shopping-cart-title">
                         <h4><a href="${item.url}">${item.name}</a></h4>
-                        <h6>Qty: ${item.quantity}</h6>
-                        <span>Ksh. ${itemTotal.toFixed(2)}</span>
+                        <h6>Qty: ${formatNumber(item.quantity)}</h6>
+                        <span>Ksh. ${formatNumber(itemTotal.toFixed(2))}</span>
                     </div>
                     <div class="shopping-cart-delete">
                         <a href="#" class="remove-item" data-id="${item.id}"><i class="ion ion-close"></i></a>
@@ -101,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         miniCart.innerHTML = html;
 
         if (document.querySelector('.shop-total')) {
-            document.querySelector('.shop-total').textContent = `Ksh. ${subtotal.toFixed(2)}`;
+            document.querySelector('.shop-total').textContent = `Ksh. ${formatNumber(subtotal.toFixed(2))}`;
         }
     }
 
