@@ -28,15 +28,17 @@
         $(this).parent().find('.language-dropdown , .shopping-cart-content , .setting-wrapper').slideToggle('medium');
     })
     
-    /* Slider active */
+    /* Slider active - MODIFIED FOR AUTO-PLAY */
     $('.slider-active').owlCarousel({
         loop: true,
-        nav: false,
-        autoplay: false,
-        autoplayTimeout: 5000,
+        nav: true,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplaySpeed: 800,
+        smartSpeed: 800,
         animateOut: 'fadeOut',
         animateIn: 'fadeIn',
-        navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+        navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
         item: 1,
         responsive: {
             0: {
@@ -54,9 +56,11 @@
     /* Best selling active */
     $('.featured-product-active').owlCarousel({
         loop: true,
-        nav: false,
-        autoplay: false,
+        nav: true,
+        autoplay: true,
         autoplayTimeout: 5000,
+        autoplaySpeed: 800,
+        smartSpeed: 800,
         navText: ['<i class="ion-ios-arrow-back"></i>', '<i class="ion-ios-arrow-forward"></i>'],
         item: 4,
         margin: 30,
@@ -133,13 +137,15 @@
         }
     })
     
-    /* Testimonial active */
+    /* Testimonial active - MODIFIED FOR AUTO-PLAY */
     $('.testimonial-active').owlCarousel({
         loop: true,
         nav: false,
-		dots: false,
-        autoplay: false,
-        autoplayTimeout: 5000,
+		dots: true,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplaySpeed: 800,
+        smartSpeed: 800,
         animateOut: 'fadeOut',
         animateIn: 'fadeIn',
         item: 1,

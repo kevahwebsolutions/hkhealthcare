@@ -1,0 +1,827 @@
+/* ============================================
+   HK HEALTHCARE - MODERN PERFORMANCE CSS
+   ============================================ */
+
+/* ============================================
+   1. SLIDING CART PANEL STYLES
+   ============================================ */
+
+.cart-panel {
+    position: fixed;
+    right: -450px;
+    top: 0;
+    width: 450px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow: hidden;
+}
+
+.cart-panel.active {
+    right: 0;
+}
+
+.cart-panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    z-index: 999;
+    transition: background 0.3s ease;
+    pointer-events: none;
+}
+
+.cart-panel-overlay.active {
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+}
+
+.cart-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #121cde 0%, #0f18b8 100%);
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cart-panel-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.cart-panel-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.cart-panel-close:hover {
+    transform: scale(1.1);
+}
+
+.cart-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.cart-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #999;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.cart-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+    animation: slideInItem 0.3s ease;
+}
+
+@keyframes slideInItem {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-item-info h5 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+}
+
+.item-price {
+    color: #121cde;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    font-size: 14px;
+}
+
+.item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    width: fit-content;
+    padding: 4px 8px;
+}
+
+.qty-btn {
+    background: white;
+    border: 1px solid #ddd;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+    background: #121cde;
+    color: white;
+    border-color: #121cde;
+}
+
+.item-quantity span {
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.remove-item-btn {
+    background: transparent;
+    border: none;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease;
+    align-self: start;
+}
+
+.remove-item-btn:hover {
+    color: #dc3545;
+}
+
+.cart-panel-footer {
+    padding: 20px;
+    background: #f9f9f9;
+    border-top: 1px solid #f0f0f0;
+}
+
+.cart-summary {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.summary-row:last-child {
+    margin-bottom: 0;
+}
+
+.summary-row.total {
+    border-top: 2px solid #f0f0f0;
+    padding-top: 10px;
+    font-weight: 700;
+    color: #121cde;
+    font-size: 16px;
+}
+
+.cart-panel-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.cart-panel-view {
+    background: white;
+    color: #121cde;
+    border: 2px solid #121cde;
+}
+
+.cart-panel-view:hover {
+    background: #f0f4ff;
+}
+
+.cart-panel-checkout {
+    background: linear-gradient(135deg, #121cde 0%, #0f18b8 100%);
+    color: white;
+    margin-bottom: 0;
+}
+
+.cart-panel-checkout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(18, 28, 222, 0.3);
+}
+
+/* ============================================
+   2. MODERN PRODUCT CARD STYLES
+   ============================================ */
+
+.product-wrapper {
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 1px solid #f0f0f0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-wrapper:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    border-color: #121cde;
+}
+
+.product-img {
+    height: 240px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.product-img img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-wrapper:hover .product-img img {
+    transform: scale(1.05);
+}
+
+.product-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-title h4 {
+    margin: 0 0 10px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+    min-height: 42px;
+}
+
+.product-title h4 a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.product-title h4 a:hover {
+    color: #121cde;
+}
+
+.product-price-wrapper {
+    margin: 10px 0 15px 0;
+}
+
+.product-price-wrapper span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #121cde;
+}
+
+.add-to-cart-btn {
+    margin-top: auto;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #121cde 0%, #0f18b8 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(18, 28, 222, 0.3);
+}
+
+.add-to-cart-btn:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   3. PAGINATION MODERN STYLES
+   ============================================ */
+
+.pagination-style ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination-style li {
+    margin: 0;
+}
+
+.pagination-style a,
+.pagination-style span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    color: #666;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.pagination-style a:hover {
+    border-color: #121cde;
+    color: #121cde;
+    background: #f0f4ff;
+    transform: translateY(-2px);
+}
+
+.pagination-style .active a,
+.pagination-style .current {
+    background: linear-gradient(135deg, #121cde 0%, #0f18b8 100%);
+    color: white;
+    border-color: #121cde;
+}
+
+.pagination-style .prev,
+.pagination-style .next {
+    width: auto;
+    padding: 0 12px;
+}
+
+.pagination-style .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   4. ENHANCED SLIDER STYLES
+   ============================================ */
+
+.slider-active.owl-carousel {
+    margin-bottom: 0;
+}
+
+.slider-active.owl-carousel .owl-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex !important;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+.slider-active.owl-carousel .owl-nav button {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #121cde !important;
+    border-radius: 50%;
+    width: 50px !important;
+    height: 50px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(18, 28, 222, 0.2) !important;
+    opacity: 0;
+}
+
+.slider-active.owl-carousel:hover .owl-nav button {
+    opacity: 1;
+}
+
+.slider-active.owl-carousel .owl-nav button:hover {
+    background: #121cde !important;
+    color: white !important;
+    transform: scale(1.1);
+}
+
+.slider-content {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.slider-content h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    animation: slideInUp 0.8s ease;
+}
+
+.slider-content p {
+    font-size: 18px;
+    color: white;
+    margin: 0 0 30px 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.theme-color {
+    color: #ffc107;
+}
+
+.slider-btn a {
+    display: inline-block;
+    padding: 14px 35px;
+    background: linear-gradient(135deg, #121cde 0%, #0f18b8 100%);
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.slider-btn a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(18, 28, 222, 0.4);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   5. RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .cart-panel {
+        width: 380px;
+        right: -380px;
+    }
+
+    .slider-content h1 {
+        font-size: 36px;
+    }
+
+    .slider-content p {
+        font-size: 16px;
+    }
+}
+
+/* Small tablets and large phones */
+@media (max-width: 768px) {
+    .cart-panel {
+        width: 100%;
+        right: -100%;
+        max-width: 400px;
+    }
+
+    .product-wrapper {
+        border-radius: 8px;
+    }
+
+    .product-img {
+        height: 200px;
+    }
+
+    .slider-content h1 {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    .slider-content p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .slider-content {
+        padding: 40px 20px;
+    }
+
+    .slider-btn a {
+        padding: 12px 25px;
+        font-size: 14px;
+    }
+
+    .pagination-style a,
+    .pagination-style span {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+    .cart-panel {
+        width: 100%;
+        right: -100%;
+        max-width: 100%;
+    }
+
+    .cart-panel-header h3 {
+        font-size: 18px;
+    }
+
+    .product-wrapper {
+        border-radius: 6px;
+    }
+
+    .product-img {
+        height: 180px;
+    }
+
+    .product-content {
+        padding: 15px;
+    }
+
+    .product-title h4 {
+        font-size: 14px;
+        min-height: auto;
+    }
+
+    .product-price-wrapper span {
+        font-size: 16px;
+    }
+
+    .add-to-cart-btn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    .slider-content h1 {
+        font-size: 22px;
+    }
+
+    .slider-content p {
+        font-size: 13px;
+    }
+
+    .slider-active.owl-carousel .owl-nav button {
+        width: 40px !important;
+        height: 40px !important;
+        margin: 0 10px;
+    }
+
+    .pagination-style ul {
+        gap: 4px;
+    }
+
+    .pagination-style a,
+    .pagination-style span {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .cart-item {
+        padding: 12px 0;
+    }
+
+    .cart-item-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .cart-summary {
+        padding: 12px;
+    }
+
+    .summary-row {
+        font-size: 13px;
+    }
+
+    .summary-row.total {
+        font-size: 15px;
+    }
+
+    .cart-panel-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+/* ============================================
+   6. SECTION TITLES & TYPOGRAPHY
+   ============================================ */
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #121cde, #0f18b8);
+    border-radius: 2px;
+}
+
+.section-subtitle {
+    color: #666;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.section-title-wrap {
+    margin-bottom: 40px;
+}
+
+/* ============================================
+   7. MODERN BUTTON STYLES
+   ============================================ */
+
+.button, .btn {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #121cde 0%, #0f18b8 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+}
+
+.button:hover, .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(18, 28, 222, 0.3);
+}
+
+.button:active, .btn:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   8. FORM STYLES
+   ============================================ */
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #121cde;
+    box-shadow: 0 0 0 3px rgba(18, 28, 222, 0.1);
+}
+
+/* ============================================
+   9. PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .slider-active.owl-carousel .owl-nav button {
+        opacity: 1;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+    .pagination-style a,
+    .pagination-style span {
+        border-width: 3px;
+    }
+
+    .cart-panel-btn {
+        border: 2px solid;
+    }
+}
+
+/* ============================================
+   10. LOADING STATE
+   ============================================ */
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
