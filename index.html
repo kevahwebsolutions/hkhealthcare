@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 — Page Not Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #020d1a;
+      --panel:     #041528;
+      --blue-deep: #0a2a4a;
+      --blue-mid:  #0d4f8c;
+      --blue-glow: #1a8fff;
+      --blue-halo: #4db8ff;
+      --white:     #e0f0ff;
+      --dim:       #4a7fa5;
+      --scan:      rgba(26,143,255,0.04);
+      --mono:      'Share Tech Mono', monospace;
+      --display:   'Rajdhani', sans-serif;
+    }
+ 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--display);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+ 
+    /* ── GRID BACKGROUND ── */
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(26,143,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26,143,255,0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridDrift 20s linear infinite;
+    }
+    @keyframes gridDrift {
+      0%   { background-position: 0 0; }
+      100% { background-position: 48px 48px; }
+    }
+ 
+    /* ── SCAN LINE ── */
+    .scanline {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        var(--scan) 3px,
+        var(--scan) 4px
+      );
+    }
+    .scan-beam {
+      position: fixed; left: 0; right: 0; height: 120px; z-index: 2;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(26,143,255,0.06) 40%,
+        rgba(26,143,255,0.10) 50%,
+        rgba(26,143,255,0.06) 60%,
+        transparent 100%);
+      animation: scanBeam 6s ease-in-out infinite;
+    }
+    @keyframes scanBeam {
+      0%   { top: -120px; }
+      100% { top: 100vh; }
+    }
+ 
+    /* ── FLOATING PARTICLES ── */
+    #canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+ 
+    /* ── MAIN CONTAINER ── */
+    .container {
+      position: relative; z-index: 10;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+      padding: 2rem;
+      max-width: 720px;
+    }
+ 
+    /* ── TOP STATUS BAR ── */
+    .status-bar {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      display: flex; gap: 2rem; align-items: center;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-glow);
+      box-shadow: 0 0 8px var(--blue-glow); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+ 
+    /* ── 404 NUMERALS ── */
+    .error-code {
+      font-family: var(--display);
+      font-size: clamp(7rem, 20vw, 13rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--blue-glow);
+      text-shadow:
+        0 0 40px rgba(26,143,255,0.5),
+        0 0 80px rgba(26,143,255,0.2);
+      position: relative;
+      animation: flicker 8s infinite;
+    }
+    .error-code::before {
+      content: '404';
+      position: absolute; inset: 0;
+      color: var(--blue-deep);
+      -webkit-text-stroke: 0;
+      clip-path: polygon(0 55%, 100% 55%, 100% 65%, 0 65%);
+      opacity: 0.5;
+      transform: translateX(4px);
+      animation: glitch1 8s infinite;
+    }
+    .error-code::after {
+      content: '404';
+      position: absolute; inset: 0;
+      color: var(--blue-halo);
+      -webkit-text-stroke: 0;
+      clip-path: polygon(0 30%, 100% 30%, 100% 36%, 0 36%);
+      opacity: 0.4;
+      transform: translateX(-4px);
+      animation: glitch2 8s infinite;
+    }
+    @keyframes flicker {
+      0%,95%,100%{opacity:1} 96%{opacity:0.8} 97%{opacity:1} 98%{opacity:0.6} 99%{opacity:1}
+    }
+    @keyframes glitch1 {
+      0%,90%,100%{transform:translateX(4px);clip-path:polygon(0 55%,100% 55%,100% 65%,0 65%)}
+      92%{transform:translateX(-6px);clip-path:polygon(0 20%,100% 20%,100% 30%,0 30%)}
+      94%{transform:translateX(4px);clip-path:polygon(0 55%,100% 55%,100% 65%,0 65%)}
+    }
+    @keyframes glitch2 {
+      0%,91%,100%{transform:translateX(-4px);clip-path:polygon(0 30%,100% 30%,100% 36%,0 36%)}
+      93%{transform:translateX(6px);clip-path:polygon(0 70%,100% 70%,100% 80%,0 80%)}
+      95%{transform:translateX(-4px);clip-path:polygon(0 30%,100% 30%,100% 36%,0 36%)}
+    }
+ 
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%; max-width: 420px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue-glow), transparent);
+      margin: 1.5rem 0;
+      position: relative;
+    }
+    .divider::after {
+      content: ''; position: absolute; top: -3px; left: 50%;
+      transform: translateX(-50%);
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--blue-glow);
+      box-shadow: 0 0 12px var(--blue-glow), 0 0 24px var(--blue-glow);
+    }
+ 
+    /* ── HEADLINE ── */
+    .headline {
+      font-size: clamp(1.3rem, 4vw, 1.9rem);
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+ 
+    .sub {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      line-height: 1.8;
+      max-width: 440px;
+      margin-bottom: 2.5rem;
+    }
+ 
+    /* ── PANEL / CODE BLOCK ── */
+    .terminal {
+      background: var(--panel);
+      border: 1px solid rgba(26,143,255,0.2);
+      border-radius: 4px;
+      padding: 1.2rem 1.6rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--dim);
+      text-align: left;
+      width: 100%; max-width: 480px;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .terminal::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blue-glow), transparent);
+    }
+    .terminal .line { display: flex; gap: 1rem; padding: 0.15rem 0; }
+    .terminal .key { color: var(--blue-halo); min-width: 100px; }
+    .terminal .val { color: var(--white); }
+    .terminal .err { color: #ff6b6b; }
+    .terminal .ok  { color: #63e2b7; }
+    .cursor {
+      display: inline-block; width: 8px; height: 14px;
+      background: var(--blue-glow); vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+ 
+    /* ── BUTTONS ── */
+    .actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+ 
+    .btn {
+      font-family: var(--display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.75rem 2rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--blue-glow);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .btn:hover::before { opacity: 0.12; }
+ 
+    .btn-primary {
+      background: var(--blue-mid);
+      border: 1px solid var(--blue-glow);
+      color: var(--white);
+      box-shadow: 0 0 18px rgba(26,143,255,0.3), inset 0 0 12px rgba(26,143,255,0.1);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(26,143,255,0.6), inset 0 0 18px rgba(26,143,255,0.2);
+      transform: translateY(-2px);
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(26,143,255,0.35);
+      color: var(--dim);
+    }
+    .btn-ghost:hover {
+      border-color: var(--blue-glow);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+ 
+    /* ── CORNER DECORATIONS ── */
+    .corner {
+      position: fixed; width: 40px; height: 40px;
+      border-color: rgba(26,143,255,0.4); border-style: solid;
+      z-index: 5;
+    }
+    .corner.tl { top: 20px; left: 20px;  border-width: 2px 0 0 2px; }
+    .corner.tr { top: 20px; right: 20px; border-width: 2px 2px 0 0; }
+    .corner.bl { bottom: 20px; left: 20px; border-width: 0 0 2px 2px; }
+    .corner.br { bottom: 20px; right: 20px; border-width: 0 2px 2px 0; }
+ 
+    /* ── FOOTER ── */
+    .footer {
+      position: fixed; bottom: 14px; left: 0; right: 0;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: rgba(74,127,165,0.5);
+      letter-spacing: 0.15em;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+ 
+  <canvas id="canvas"></canvas>
+  <div class="grid-bg"></div>
+  <div class="scanline"></div>
+  <div class="scan-beam"></div>
+ 
+  <!-- Corner decorations -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+ 
+  <div class="container">
+    <div class="status-bar">
+      <div class="dot"></div>
+      <span>SYS::ERROR</span>
+      <span>HTTP/1.1</span>
+      <span id="ts">00:00:00</span>
+    </div>
+ 
+    <div class="error-code">404</div>
+ 
+    <div class="divider"></div>
+ 
+    <h1 class="headline">Page Not Found</h1>
+    <p class="sub">The resource you requested could not be located on this server.<br>
+    </p>
+ 
+    <div class="terminal">
+      <div class="line"><span class="key">STATUS</span>   <span class="val err">404 NOT_FOUND</span></div>
+      <div class="line"><span class="key">PROTOCOL</span> <span class="val">HTTP/1.1</span></div>
+      <div class="line"><span class="key">PATH</span>      <span class="val" id="path-val">/unknown</span></div>
+      <div class="line"><span class="key">TIMESTAMP</span><span class="val" id="ts-full">—</span></div>
+      <div class="line"><span class="key">SIGNAL</span>   <span class="val ok">SERVER ALIVE</span></div>
+      <div class="line"><span class="key">&gt;</span>         <span class="val"><span class="cursor"></span></span></div>
+    </div>
+ 
+    <div class="actions">
+      <a class="btn btn-primary" href="javascript:history.back()">← Go Back</a>
+      <a class="btn btn-ghost"   href="/">Home</a>
+    </div>
+  </div>
+ 
+  <div class="footer">SYSTEM MONITOR v2.4 &nbsp;|&nbsp; ERR_RESOURCE_NOT_FOUND &nbsp;|&nbsp; <span id="ft-ts"></span></div>
+ 
+  <script>
+    /* ── TIMESTAMP ── */
+    function pad(n){return String(n).padStart(2,'0');}
+    function tick(){
+      const d = new Date();
+      const t = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+      document.getElementById('ts').textContent = t;
+      document.getElementById('ft-ts').textContent = d.toUTCString();
+      document.getElementById('ts-full').textContent = d.toISOString();
+    }
+    tick(); setInterval(tick, 1000);
+ 
+    /* ── PATH FROM WINDOW ── */
+    document.getElementById('path-val').textContent = window.location.pathname || '/unknown';
+ 
+    /* ── PARTICLE CANVAS ── */
+    const canvas = document.getElementById('canvas');
+    const ctx    = canvas.getContext('2d');
+ 
+    let W, H, particles = [];
+    function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+ 
+    class Particle {
+      constructor(){
+        this.x  = Math.random() * W;
+        this.y  = Math.random() * H;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.r  = Math.random() * 1.5 + 0.5;
+        this.a  = Math.random() * 0.5 + 0.1;
+      }
+      update(){
+        this.x += this.vx; this.y += this.vy;
+        if(this.x<0) this.x=W; if(this.x>W) this.x=0;
+        if(this.y<0) this.y=H; if(this.y>H) this.y=0;
+      }
+      draw(){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(26,143,255,${this.a})`;
+        ctx.fill();
+      }
+    }
+ 
+    for(let i=0;i<80;i++) particles.push(new Particle());
+ 
+    function drawConnections(){
+      for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const d  = Math.sqrt(dx*dx+dy*dy);
+          if(d < 110){
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(26,143,255,${0.12*(1-d/110)})`;
+            ctx.lineWidth   = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+ 
+    function loop(){
+      ctx.clearRect(0,0,W,H);
+      drawConnections();
+      particles.forEach(p=>{ p.update(); p.draw(); });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>
